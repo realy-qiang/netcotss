@@ -1,0 +1,33 @@
+{% extends 'base.html' %}
+
+{% load static %}
+
+{% block title %}
+    {{ block.super }}
+    主页面
+{% endblock %}
+
+{% block footer %}
+    {{ block.super }}
+    <!--导航区域开始-->
+    <div id="index_navi">
+        <ul id="menu">
+            <li><img src="{% static 'images/index_out.png' %}" alt="" id="index"></li>
+            <li><img src="{% static 'images/role_out.png' %}" alt="" id="role"></li>
+            <li><img src="{% static 'images/admin_out.png' %}" alt="" id="admin"></li>
+            <li><img src="{% static 'images/fee_out.png' %}" alt="" id="fee"></li>
+            <li><img src="{% static 'images/account_out.png' %}" alt="" id="account" super_number="{{ super_number }}"></li>
+            <li><img src="{% static 'images/service_out.png' %}" alt="" id="service" super_number="{{ super_number }}"></li>
+            <li><img src="{% static 'images/bill_out.png' %}" alt="" id="bill" super_number="{{ super_number }}"></li>
+            <li><img src="{% static 'images/report_out.png' %}" alt="" id="report"></li>
+            <li><img src="{% static 'images/information_out.png' %}" alt="" id="information"></li>
+            <li><img src="{% static 'images/password_out.png' %}" alt="" id="password"></li>
+        </ul>
+    </div>
+    <!--导航区域结束-->
+{% endblock %}
+
+{% block ext_js %}
+    {{ block.super }}
+    <script type="text/javascript" src="{% static '/main/login/index.js' %}"></script>
+{% endblock %}

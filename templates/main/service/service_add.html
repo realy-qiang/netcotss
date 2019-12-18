@@ -1,0 +1,84 @@
+{% extends 'main/service/base_service.html' %}
+
+{% load static %}
+
+{% block title %}
+    {{ block.super }}
+
+{% endblock %}
+
+{% block ext_js %}
+    {{ block.super }}
+    <script type="text/javascript" src="{% static 'main/service/js/service_add.js' %}"></script>
+
+{% endblock %}
+
+{% block content %}
+    {{ block.super }}
+    <!--主要区域开始-->
+        <div id="main">
+            <!--保存操作的提示信息-->
+            <div id="save_result_info" class="save_fail"></div>
+            <form action="{% url 'serviceApp:serviceAdd' %}" method="post" class="main_form" onsubmit="return parse()">
+                <!--内容项-->
+                <div class="text_info clearfix"><span>身份证：</span></div>
+                <div class="input_info">
+                    <input type="text" placeholder="查询出的结果写入账务账号" id="idcard_no" />
+                    <input type="button" value="查询账务账号" class="btn_search_large" />
+                    <span class="required">*</span>
+                    <span class="validate_msg_short"></span>
+                </div>
+                <div class="text_info clearfix"><span>账务账号：</span></div>
+                <div class="input_info">
+                    <input type="text" value="" id="account_id" name="account_id" readonly="readonly"/>
+                    <span class="required">*</span>
+                    <span class="account_id_validate_msg"></span>
+                </div>
+                <div class="text_info clearfix"><span>资费类型：</span></div>
+                <div class="input_info">
+                    <select name="type">
+                        <option value="包 20 小时">包 20 小时</option>
+                        <option value="包 40 小时">包 40 小时</option>
+                        <option value="包 60 小时">包 60 小时</option>
+                        <option value="5.9元套餐">5.9元套餐</option>
+                        <option value="6.9套餐">6.9套餐</option>
+                        <option value="8.5元套餐">8.5元套餐</option>
+                        <option value="10.5元套餐">10.5元套餐</option>
+                        <option value="计时收费">计时收费</option>
+                        <option value="包月">包月</option>
+                    </select>
+                </div>
+                <div class="text_info clearfix"><span>服务器 IP：</span></div>
+                <div class="input_info">
+                    <input type="text" id="host" name="host"/>
+                    <span class="required">*</span>
+                    <span class="host_validate_msg"></span>
+                </div>
+                <div class="text_info clearfix"><span>登录 OS 账号：</span></div>
+                <div class="input_info">
+                    <input type="text" placeholder="创建即启用，状态为开通" id="os_name" name="os_name"/>
+                    <span class="required">*</span>
+                    <span class="os_name_validate_msg">8长度以内的字母、数字和下划线的组合</span>
+                </div>
+                <div class="text_info clearfix"><span>密码：</span></div>
+                <div class="input_info">
+                    <input type="password"  id="password" name="password"/>
+                    <span class="required">*</span>
+                    <span class="password_validate_msg_long">8-30长度以内的字母、数字和下划线的组合</span>
+                </div>
+                <div class="text_info clearfix"><span>重复密码：</span></div>
+                <div class="input_info">
+                    <input type="password"  id="password_sure"/>
+                    <span class="required">*</span>
+                    <span class="password_sure_validate_msg">两次密码必须相同</span>
+                </div>
+                <!--操作按钮-->
+                <div class="button_info clearfix">
+                    <input type="submit" value="保存" class="btn_save" id="service_save" disabled/>
+                    <input type="button" value="取消" class="btn_save" id="addService_quit"/>
+                </div>
+            </form>
+        </div>
+        <!--主要区域结束-->
+
+{% endblock %}

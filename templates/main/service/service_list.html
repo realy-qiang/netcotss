@@ -1,0 +1,146 @@
+{% extends 'main/service/base_service.html' %}
+
+{% load static %}
+
+{% block title %}
+    {{ block.super }}
+
+{% endblock %}
+
+{% block ext_js %}
+    {{ block.super }}
+    <script type="text/javascript" src="{% static 'main/service/js/service_list.js' %}"></script>
+{% endblock %}
+
+{% block content %}
+    {{ block.super }}
+    <!--主要区域开始-->
+        <div id="main">
+            <form action="" method="">
+                <!--查询-->
+                <div class="search_add">
+                    <div>OS 账号：<input type="text" value="" class="width100 text_search" id="os_name"/></div>
+                    <div>服务器 IP：<input type="text" value="" class="width100 text_search" id="host"/></div>
+                    <div>身份证：<input type="text"  value="" class="text_search" id="idcard_no"/></div>
+                    <div>状态：
+                        <select class="select_search" id="service_type">
+                            <option>全部</option>
+                            <option>开通</option>
+                            <option>暂停</option>
+                            <option>删除</option>
+                        </select>
+                    </div>
+                    <div><input type="button" value="搜索" class="btn_search" id="search"/></div>
+                    <input type="button" value="增加" class="btn_add" />
+                </div>
+                <!--删除的操作提示-->
+                <div id="delete_result_info" class="delete_success">
+                    <img src="{% static 'images/close.png' %}" onclick="this.parentNode.style.display='none';" />
+                    删除成功！
+                </div>
+
+                <div id="pause_result_info" class="pause_success">
+                    <img src="{% static 'images/close.png' %}" onclick="this.parentNode.style.display='none';" />
+                    开通成功！
+                </div>
+
+                <div id="operate_result_info" class="operate_success">
+                    <img src="{% static 'images/close.png' %}" onclick="this.parentNode.style.display='none';" />
+                    暂停成功！
+                </div>
+
+
+                <!--数据区域：用表格展示数据-->
+                <div id="data">
+                    <table id="datalist">
+                    <tr>
+                        <th class="width50">业务ID</th>
+                        <th class="width70">账务账号ID</th>
+                        <th class="width150">身份证</th>
+                        <th class="width70">姓名</th>
+                        <th>OS 账号</th>
+                        <th class="width50">状态</th>
+                        <th class="width100">服务器 IP</th>
+                        <th class="width100">资费</th>
+                        <th class="width200"></th>
+                    </tr>
+                    {% for service in service_list %}
+                    <tr>
+                        <td><a href="{% url 'serviceApp:serviceDetial' %}?service_id={{ service.id }}" title="查看明细">{{ service.id }}</a></td>
+                        <td>{{ service.s_account_id }}</td>
+                        <td>{{ service.s_account.idcard_no }}</td>
+                        <td>{{ service.s_account.real_name }}</td>
+                        <td>{{ service.os_username }}</td>
+                        {% if service.status %}
+                            <td>开通</td>
+                            {% elif service.status == None %}
+                            <td>删除</td>
+                            {% else %}
+                            <td>暂停</td>
+                        {% endif %}
+
+                        <td>{{ service.unix_host }}</td>
+                        <td>
+                            <a class="summary"  onmouseover="showDetail(true,this);" onmouseout="showDetail(false,this);">{{ service.s_usercost.name }}</a>
+                            <!--浮动的详细信息-->
+                            <div class="detail_info">
+                                20小时，24.5 元，超出部分 0.03元/分钟
+                            </div>
+                        </td>
+                        <td class="td_modi">
+                        {% if service.status == True %}
+
+                            <input type="button" value="暂停" class="btn_pause" onclick="setState(this,{{ service.id }});" />
+                            <input type="button" value="修改" class="btn_modify" onclick="modifi({{ service.id }})"/>
+                            <input type="button" value="删除" class="btn_delete" onclick="deleteAccount({{ service.id }});" />
+                            {% elif service.status == False %}
+                            {% if service.s_account.status == False or service.s_account.status == None %}
+                                <input type="button" value="开通" class="btn_pause"/>
+                                {% else %}
+                                <input type="button" value="开通" class="btn_pause" onclick="setState(this, {{ service.id }});" />
+                            {% endif %}
+                            <input type="button" value="修改" class="btn_modify" onclick="modifi({{ service.id }})"/>
+                            <input type="button" value="删除" class="btn_delete" onclick="deleteAccount({{ service.id }});" />
+                            {% else %}
+                        {% endif %}
+                        </td>
+                    </tr>
+                    {% endfor %}
+
+                </table>
+                <p>业务说明：<br />
+                1、创建即开通，记载创建时间；<br />
+                2、暂停后，记载暂停时间；<br />
+                3、重新开通后，删除暂停时间；<br />
+                4、删除后，记载删除时间，标示为删除，不能再开通、修改、删除；<br />
+                5、业务账号不设计修改密码功能，由用户自服务功能实现；<br />
+                6、暂停和删除状态的账务账号下属的业务账号不能被开通。</p>
+                </div>
+                <!--分页-->
+                <!--分页-->
+                <div id="pages">
+                    {% if service_list.has_previous %}
+                        <a href="{% url 'serviceApp:serviceList' %}?page={{ service_list.previous_page_number }}">上一页</a>
+                    {% else %}
+                        <a href="#">上一页</a>
+                    {% endif %}
+                    {% for p in pages %}
+                        {% if p == page %}
+                            <a href="{% url 'serviceApp:serviceList' %}?page={{ p }}" style="color: red">{{ p }}</a>
+                        {% else %}
+                            <a href="{% url 'serviceApp:serviceList' %}?page={{ p }}">{{ p }}</a>
+                        {% endif %}
+                    {% endfor %}
+
+                    {% if service_list.has_next %}
+                        <a href="{% url 'serviceApp:serviceList' %}?page={{ service_list.next_page_number }}">下一页</a>
+                    {% else %}
+                        <a href="#">下一页</a>
+                    {% endif %}
+
+                </div>
+            </form>
+        </div>
+        <!--主要区域结束-->
+{% endblock %}
+

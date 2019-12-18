@@ -1,0 +1,45 @@
+﻿{% extends 'base.html' %}
+
+{% load static %}
+
+{% block title %}
+    {{ block.super }}
+    登录
+{% endblock %}
+
+{% block content %}
+     {{ block.super }}
+
+        <body class="index">
+            <div class="login_box">
+                <table>
+                    <tr>
+                        <td class="login_info">账号：</td>
+                        <td colspan="2"><input name="super_number" type="text" class="width150"/></td>
+                        <td class="login_error_info"><span class="required">30长度的字母、数字和下划线</span></td>
+                    </tr>
+                    <tr>
+                        <td class="login_info">密码：</td>
+                        <td colspan="2"><input name="password" type="password" class="width150"/></td>
+                        <td><span class="required">30长度的字母、数字和下划线</span></td>
+                    </tr>
+                    <tr>
+                        <td class="login_info">验证码：</td>
+                        <td class="width70"><input name="imgCode" type="text" class="width70"/></td>
+                        <td><img src="/adm/get_code/" style="" width="75px" height="31px" alt="" id="changeImage" onclick="chageImage();"></td>
+                        <td><span class="required" id="hint"></span></td>
+                    </tr>
+                    <tr>
+                        <td></td>
+                        <td class="login_button" colspan="2">
+                            <img id="tologin" src="{% static 'images/login_btn.png' %}"/>
+                        </td>
+                    </tr>
+                </table>
+            </div>
+        </body>
+{% endblock %}
+{% block ext_js %}
+    {{ block.super }}
+    <script type="text/javascript" src="{% static 'main/login/login.js' %}"></script>
+{% endblock %}

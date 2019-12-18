@@ -1,0 +1,63 @@
+{% extends 'main/service/base_service.html' %}
+
+{% load static %}
+
+{% block title %}
+    {{ block.super }}
+
+{% endblock %}
+
+{% block ext_js %}
+    {{ block.super }}
+    <script type="text/javascript" src="{% static 'main/service/js/service_detial.js' %}"></script>
+{% endblock %}
+
+{% block content %}
+    {{ block.super }}
+    <!--主要区域开始-->
+        <div id="main">
+            <form action="" method="" class="main_form">
+                <!--必填项-->
+                <div class="text_info clearfix"><span>业务账号ID：</span></div>
+                <div class="input_info"><input type="text" value={{ service.id }} readonly class="readonly" /></div>
+                <div class="text_info clearfix"><span>账务账号ID：</span></div>
+                <div class="input_info"><input type="text" value={{ service.s_account.id }} readonly class="readonly" /></div>
+                <div class="text_info clearfix"><span>客户姓名：</span></div>
+                <div class="input_info"><input type="text" readonly class="readonly" value={{ service.s_account.real_name }} /></div>
+                <div class="text_info clearfix"><span>身份证号码：</span></div>
+                <div class="input_info"><input type="text" readonly class="readonly" value={{ service.s_account.idcard_no }} /></div>
+                <div class="text_info clearfix"><span>服务器 IP：</span></div>
+                <div class="input_info"><input type="text" value={{ service.unix_host }} readonly class="readonly" /></div>
+                <div class="text_info clearfix"><span>OS 账号：</span></div>
+                <div class="input_info"><input type="text" value={{ service.os_username }} readonly class="readonly" /></div>
+                <div class="text_info clearfix"><span>状态：</span></div>
+                <div class="input_info">
+                    <select disabled>
+                        {% if service.status == True %}
+                            <option>开通</option>
+                            {% elif service.status == None %}
+                            <option>删除</option>
+                            {% else %}
+                            <option>暂停</option>
+                        {% endif %}
+                    </select>
+                </div>
+                <div class="text_info clearfix"><span>开通时间：</span></div>
+                <div class="input_info"><input type="text" readonly class="readonly" value="{{ service.create_date }}"/></div>
+                <div class="text_info clearfix"><span>资费 ID：</span></div>
+                <div class="input_info"><input type="text" class="readonly" readonly value="{{ service.s_usercost.id }}"/></div>
+                <div class="text_info clearfix"><span>资费名称：</span></div>
+                <div class="input_info"><input type="text" readonly class="width200 readonly" value="{{ service.s_usercost.name }}"/></div>
+                <div class="text_info clearfix"><span>资费说明：</span></div>
+                <div class="input_info_high">
+                    <textarea class="width300 height70 readonly" readonly>{{ service.s_usercost.descr }}</textarea>
+                </div>
+                <!--操作按钮-->
+                <div class="button_info clearfix">
+                    <input type="button" value="返回" class="btn_save" id="detail_back"/>
+                </div>
+            </form>
+        </div>
+        <!--主要区域结束-->
+{% endblock %}
+
